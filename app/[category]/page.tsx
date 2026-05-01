@@ -7,7 +7,9 @@ import NewsFeed from "@/components/NewsFeed";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-export const revalidate = 30;
+// Force dynamic rendering so content changes show immediately
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 // Generate static paths for all categories
 export function generateStaticParams() {

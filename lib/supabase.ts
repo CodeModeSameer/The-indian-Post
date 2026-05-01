@@ -22,6 +22,22 @@ function createSupabaseClient(): SupabaseClient {
 export const supabase = createSupabaseClient();
 export { isConfigured };
 
+// Server-side admin client using the service role key — bypasses RLS.
+// Use this for mutations (INSERT, UPDATE, DELETE) in API routes only.
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+function createSupabaseAdminClient(): SupabaseClient {
+    if (supabaseServiceRoleKey.length > 10 && isConfigured) {
+        return createClient(supabaseUrl, supabaseServiceRoleKey, {
+            auth: { persistSession: false, autoRefreshToken: false },
+        });
+    }
+    // Fall back to the anon client if no service role key is set
+    return supabase;
+}
+
+export const supabaseAdmin = createSupabaseAdminClient();
+
 // Types for our database tables
 export interface Banner {
     id: string;

@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseAdmin, CATEGORIES } from "@/lib/supabase";
 
-// Upload image to Supabase Storage and return public URL
+// Revalidate the homepage and all category pages so changes show immediately
+function revalidateAllPaths() {
+    revalidatePath("/");
+    for (const cat of CATEGORIES) {
+        revalidatePath(`/${cat.toLowerCase()}`);
+    }
+}
 async function uploadImage(file: File): Promise<string> {
     const ext = file.name.split(".").pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
     const filePath = `uploads/${fileName}`;
 
-    const { error } = await supabase.storage
+    const { error } = await supabaseAdmin.storage
         .from("media")
         .upload(filePath, file, {
             cacheControl: "3600",
@@ -17,7 +23,7 @@ async function uploadImage(file: File): Promise<string> {
 
     if (error) throw new Error(`Upload failed: ${error.message}`);
 
-    const { data } = supabase.storage.from("media").getPublicUrl(filePath);
+    const { data } = supabaseAdmin.storage.from("media").getPublicUrl(filePath);
     return data.publicUrl;
 }
 
@@ -83,14 +89,14 @@ export async function POST(request: NextRequest) {
             const heading = formData.get("heading") as string;
             const leadText = formData.get("leadText") as string;
 
-            const { error } = await supabase.from("banners").insert({
+            const { error } = await supabaseAdmin.from("banners").insert({
                 image_url: imageUrl,
                 heading,
                 lead_text: leadText,
             });
 
             if (error) throw error;
-            revalidatePath("/");
+            revalidateAllPaths();
             return NextResponse.json({ success: true, message: "Banner added!" });
         }
 
@@ -100,7 +106,7 @@ export async function POST(request: NextRequest) {
             const category = formData.get("category") as string;
             const link = formData.get("link") as string;
 
-            const { error } = await supabase.from("news").insert({
+            const { error } = await supabaseAdmin.from("news").insert({
                 image_url: imageUrl,
                 headline,
                 body,
@@ -109,7 +115,7 @@ export async function POST(request: NextRequest) {
             });
 
             if (error) throw error;
-            revalidatePath("/");
+            revalidateAllPaths();
             return NextResponse.json({ success: true, message: "News added!" });
         }
 
@@ -118,7 +124,7 @@ export async function POST(request: NextRequest) {
             const videoUrl = formData.get("videoUrl") as string;
             const category = formData.get("category") as string;
 
-            const { error } = await supabase.from("videos").insert({
+            const { error } = await supabaseAdmin.from("videos").insert({
                 thumbnail_url: imageUrl,
                 video_url: videoUrl || "",
                 title,
@@ -126,7 +132,7 @@ export async function POST(request: NextRequest) {
             });
 
             if (error) throw error;
-            revalidatePath("/");
+            revalidateAllPaths();
             return NextResponse.json({ success: true, message: "Video added!" });
         }
 
@@ -164,13 +170,13 @@ export async function PUT(request: NextRequest) {
             const updateData: Record<string, string> = { heading, lead_text: leadText };
             if (imageUrl) updateData.image_url = imageUrl;
 
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from("banners")
                 .update(updateData)
                 .eq("id", id);
 
             if (error) throw error;
-            revalidatePath("/");
+            revalidateAllPaths();
             return NextResponse.json({ success: true, message: "Banner updated!" });
         }
 
@@ -183,13 +189,13 @@ export async function PUT(request: NextRequest) {
             const updateData: Record<string, string> = { headline, body, category, link };
             if (imageUrl) updateData.image_url = imageUrl;
 
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from("news")
                 .update(updateData)
                 .eq("id", id);
 
             if (error) throw error;
-            revalidatePath("/");
+            revalidateAllPaths();
             return NextResponse.json({ success: true, message: "News updated!" });
         }
 
@@ -205,13 +211,13 @@ export async function PUT(request: NextRequest) {
             };
             if (imageUrl) updateData.thumbnail_url = imageUrl;
 
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from("videos")
                 .update(updateData)
                 .eq("id", id);
 
             if (error) throw error;
-            revalidatePath("/");
+            revalidateAllPaths();
             return NextResponse.json({ success: true, message: "Video updated!" });
         }
 
@@ -246,10 +252,10 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        const { error } = await supabase.from(table).delete().eq("id", id);
+        const { error } = await supabaseAdmin.from(table).delete().eq("id", id);
 
         if (error) throw error;
-        revalidatePath("/");
+        revalidateAllPaths();
         return NextResponse.json({ success: true, message: `${type} deleted!` });
     } catch (error) {
         const message =

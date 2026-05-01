@@ -6,8 +6,9 @@ import HeroBanner from "@/components/HeroBanner";
 import NewsFeed from "@/components/NewsFeed";
 import TrendingVideos from "@/components/TrendingVideos";
 
-// Revalidate every 30 seconds for near-realtime updates
-export const revalidate = 30;
+// Force dynamic rendering so content changes (delete/update) show immediately
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 async function getBanner(): Promise<Banner | null> {
   const { data } = await supabase
