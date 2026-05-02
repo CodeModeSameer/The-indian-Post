@@ -106,7 +106,7 @@ export default function NewsFeed({ items }: NewsFeedProps) {
                     {/* News Text */}
                     <div className="news-text">
                         <h3 className="news-headline">{item.headline}</h3>
-                        <p className="news-body">{item.body}</p>
+                        <div className="news-body" dangerouslySetInnerHTML={{ __html: item.body }} />
                         <a
                             href={item.link || "#"}
                             className="news-cta"

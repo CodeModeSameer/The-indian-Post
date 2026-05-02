@@ -3,6 +3,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { CATEGORIES } from "@/lib/supabase";
 import type { NewsItem } from "@/lib/supabase";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function NewsForm() {
     const [headline, setHeadline] = useState("");
@@ -175,13 +179,12 @@ export default function NewsForm() {
 
                     <div className="form-group">
                         <label className="form-label" htmlFor="news-body">Description</label>
-                        <textarea
-                            id="news-body"
-                            className="form-textarea"
-                            placeholder="Enter article description..."
+                        <ReactQuill
+                            theme="snow"
                             value={body}
-                            onChange={(e) => setBody(e.target.value)}
-                            required
+                            onChange={setBody}
+                            placeholder="Enter article description..."
+                            className="form-textarea-quill"
                         />
                     </div>
 
