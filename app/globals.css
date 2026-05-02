@@ -609,33 +609,67 @@
 /* ──── Responsive ──── */
 @media (max-width: 768px) {
   .header-logo {
-    font-size: 1.75rem;
+    font-size: 2.5rem !important;
   }
 
   .header-meta {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
+  }
+
+  .hero-section {
+    margin: 1rem auto;
+    padding: 0;
+  }
+
+  .hero-image-wrapper {
+    aspect-ratio: 4 / 3 !important;
+    border-radius: 0;
   }
 
   .hero-content {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+    padding: 0 1rem;
   }
 
   .hero-headline {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+  }
+
+  .news-feed {
+    padding: 1.5rem 1rem;
   }
 
   .news-item {
     grid-template-columns: 1fr;
     gap: 1rem;
+    padding: 1.5rem 0;
   }
 
   .news-item.reverse {
     direction: ltr;
   }
 
+  .news-image-wrapper {
+    aspect-ratio: 3 / 2 !important;
+  }
+
+  .trending-section {
+    padding: 2rem 1rem !important;
+  }
+
+  .trending-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 1rem !important;
+    padding-bottom: 1rem !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
   .video-card {
-    flex: 0 0 140px;
+    flex: 0 0 220px !important;
+    scroll-snap-align: start;
   }
 
   .admin-layout {
@@ -673,20 +707,51 @@
   }
 
   .header-logo {
-    font-size: 1.4rem;
+    font-size: 2rem !important;
   }
 
   .nav-link {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.7rem;
+    padding: 0.6rem 0.85rem !important;
+    font-size: 0.75rem !important;
   }
 
   .hero-headline {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 
   .news-headline {
-    font-size: 1.2rem;
+    font-size: 1.35rem;
+  }
+}
+
+/* ──── Desktop Overrides (min-width: 769px) ──── */
+@media (min-width: 769px) {
+  .header-logo {
+    font-family: "Times New Roman MT", "Times New Roman", Times, serif !important;
+    font-size: 70px !important;
+  }
+
+  .hero-image-wrapper {
+    aspect-ratio: 16 / 6 !important;
+  }
+
+  .news-image-wrapper {
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .trending-grid {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 1.5rem !important;
+  }
+
+  .video-card {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .trending-section {
+    padding: 2rem 2rem 3rem !important;
   }
 }
 
@@ -712,7 +777,6 @@
 
 .nav-link {
   font-weight: 700 !important;
-  font-size: 0.85rem !important;
   letter-spacing: 0.1em !important;
   transition: background 0.2s, color 0.2s !important;
 }
@@ -721,34 +785,6 @@
 .nav-link.active {
   background: #1a1a1a !important;
   color: #ffffff !important;
-}
-
-.header-logo {
-  font-family: "Times New Roman MT", "Times New Roman", Times, serif !important;
-  font-size: 70px !important;
-}
-
-.hero-image-wrapper {
-  aspect-ratio: 16 / 6 !important;
-}
-
-.news-image-wrapper {
-  aspect-ratio: 16 / 9 !important;
-}
-
-.trending-grid {
-  display: flex !important;
-  justify-content: space-between !important;
-  gap: 1.5rem !important;
-}
-
-.video-card {
-  flex: 1 !important;
-  min-width: 0 !important;
-}
-
-.trending-section {
-  padding: 2rem 2rem 3rem !important;
 }
 
 /* ──── Admin History (unlayered for specificity) ──── */
