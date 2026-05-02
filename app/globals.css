@@ -608,12 +608,24 @@
 
 /* ──── Responsive ──── */
 @media (max-width: 768px) {
+  .header-top {
+    position: relative;
+    justify-content: center;
+  }
+
   .header-logo {
-    font-size: 2.5rem !important;
+    font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
+    white-space: nowrap;
   }
 
   .header-meta {
-    font-size: 0.65rem;
+    display: none; /* Hide date/author on mobile to free up space for the logo */
+  }
+
+  .header-search {
+    position: absolute;
+    right: 0;
+    min-width: auto;
   }
 
   .hero-section {
@@ -707,7 +719,7 @@
   }
 
   .header-logo {
-    font-size: 2rem !important;
+    font-size: clamp(1.5rem, 9vw, 2.2rem) !important;
   }
 
   .nav-link {
